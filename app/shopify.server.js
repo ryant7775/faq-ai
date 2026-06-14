@@ -14,9 +14,9 @@ const shopify = shopifyApp({
   scopes: process.env.SCOPES?.split(","),
   appUrl: process.env.SHOPIFY_APP_URL || "",
   authPathPrefix: "/auth",
-  // TODO(production): SQLite sessions are lost on container restart unless the DB file
-  // is mounted on a persistent volume. Before go-live, mount prisma/dev.sqlite (or switch
-  // Prisma to Postgres) so offline OAuth sessions survive deploys and restarts.
+  // TODO(production): Mount a Railway volume at /data (not /app/prisma) so dev.sqlite persists.
+  // DATABASE_URL should be file:/data/dev.sqlite in production. Do not mount over /app/prisma
+  // or Prisma will lose schema.prisma at runtime.
   sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
   future: {
