@@ -1,0 +1,241 @@
+{% comment %}
+  sections/iframe-embed-b.liquid — Template B
+  Two-column layout: optional sidebar (context text + CTA) alongside the iFrame.
+  Collapses to single column on mobile.
+{% endcomment %}
+
+{%- assign iframe_url    = section.settings.iframe_url -%}
+{%- assign iframe_height = section.settings.iframe_height -%}
+{%- assign layout        = section.settings.layout -%}
+{%- assign sidebar_width = section.settings.sidebar_width -%}
+
+<section
+  id="iframe-embed-b-{{ section.id }}"
+  class="iframe-embed-b"
+  style="background-color: {{ section.settings.background_color }}; padding: {{ section.settings.vertical_padding }}px 0;"
+>
+  <div class="page-width">
+    <div class="iframe-embed-b__layout iframe-embed-b__layout--{{ layout }}">
+
+      {%- if section.settings.show_sidebar -%}
+        <aside class="iframe-embed-b__sidebar" style="flex: 0 0 {{ sidebar_width }}%; max-width: {{ sidebar_width }}%;">
+          {%- if section.settings.sidebar_heading != blank -%}
+            <h2 class="iframe-embed-b__heading">{{ section.settings.sidebar_heading | escape }}</h2>
+          {%- endif -%}
+          {%- if section.settings.sidebar_text != blank -%}
+            <div class="iframe-embed-b__text rte">{{ section.settings.sidebar_text }}</div>
+          {%- endif -%}
+          {%- if section.settings.sidebar_cta_label != blank and section.settings.sidebar_cta_url != blank -%}
+            <a href="{{ section.settings.sidebar_cta_url }}" class="button iframe-embed-b__cta">
+              {{ section.settings.sidebar_cta_label | escape }}
+            </a>
+          {%- endif -%}
+        </aside>
+      {%- endif -%}
+
+      <div class="iframe-embed-b__main">
+        {%- if section.settings.show_section_title and section.settings.section_title != blank -%}
+          <h2 class="iframe-embed__title">{{ section.settings.section_title | escape }}</h2>
+        {%- endif -%}
+
+        <div class="iframe-embed__wrapper" style="height: {{ iframe_height }}px;">
+          {%- if iframe_url != blank -%}
+            <iframe
+              src="{{ iframe_url | escape }}"
+              width="100%"
+              height="{{ iframe_height }}"
+              frameborder="0"
+              scrolling="{{ section.settings.allow_scroll }}"
+              loading="lazy"
+              title="{{ section.settings.section_title | default: 'Embedded content' | escape }}"
+              {% if section.settings.allow_fullscreen %}allowfullscreen{% endif %}
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation"
+              style="display:block;border:none;width:100%;height:100%;"
+            ></iframe>
+          {%- else -%}
+            <div class="iframe-embed__placeholder">
+              <p>Set the iFrame URL in the theme editor to display content here.</p>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .iframe-embed-b { width: 100%; box-sizing: border-box; }
+  .iframe-embed-b .page-width { max-width: var(--page-width, 1200px); margin: 0 auto; padding: 0 20px; }
+
+  .iframe-embed-b__layout {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+  }
+  .iframe-embed-b__layout--sidebar-right { flex-direction: row; }
+  .iframe-embed-b__layout--sidebar-left  { flex-direction: row-reverse; }
+  .iframe-embed-b__layout--no-sidebar    { flex-direction: row; }
+
+  .iframe-embed-b__main    { flex: 1 1 0; min-width: 0; }
+  .iframe-embed-b__sidebar { flex-shrink: 0; }
+  .iframe-embed-b__heading { font-size: 1.25rem; margin: 0 0 12px; }
+  .iframe-embed-b__text    { font-size: 0.95rem; line-height: 1.6; color: #4b5563; }
+  .iframe-embed-b__cta {
+    display: inline-block; margin-top: 16px;
+    padding: 10px 20px;
+    background: var(--color-button, #000);
+    color: var(--color-button-text, #fff);
+    text-decoration: none; border-radius: 4px; font-size: 0.9rem;
+  }
+
+  .iframe-embed__title   { margin: 0 0 16px; font-size: 1.5rem; }
+  .iframe-embed__wrapper { width: 100%; overflow: hidden; }
+  .iframe-embed__placeholder {
+    display: flex; align-items: center; justify-content: center;
+    height: 100%; background: #f4f6f8; border: 2px dashed #c4c8ce;
+    border-radius: 8px; color: #6b7280; text-align: center; padding: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .iframe-embed-b__layout { flex-direction: column !important; }
+    .iframe-embed-b__sidebar { max-width: 100% !important; flex: 0 0 100% !important; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "iFrame Embed — B",
+  "tag": "section",
+  "class": "iframe-embed-b",
+  "settings": [
+    {
+      "type": "header",
+      "content": "iFrame settings"
+    },
+    {
+      "type": "text",
+      "id": "iframe_url",
+      "label": "iFrame URL",
+      "placeholder": "https://your-content-source.com/embed",
+      "info": "The URL of the curated content to embed."
+    },
+    {
+      "type": "range",
+      "id": "iframe_height",
+      "label": "iFrame height (px)",
+      "min": 200,
+      "max": 1200,
+      "step": 50,
+      "default": 600
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "sidebar-right", "label": "Sidebar right" },
+        { "value": "sidebar-left",  "label": "Sidebar left" },
+        { "value": "no-sidebar",    "label": "Full width (no sidebar)" }
+      ],
+      "default": "sidebar-right"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sidebar",
+      "label": "Show sidebar",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "sidebar_width",
+      "label": "Sidebar width (%)",
+      "min": 20,
+      "max": 50,
+      "step": 5,
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Sidebar content"
+    },
+    {
+      "type": "text",
+      "id": "sidebar_heading",
+      "label": "Sidebar heading",
+      "default": "About this content"
+    },
+    {
+      "type": "richtext",
+      "id": "sidebar_text",
+      "label": "Sidebar text",
+      "default": "<p>Add context or a description here.</p>"
+    },
+    {
+      "type": "text",
+      "id": "sidebar_cta_label",
+      "label": "CTA button label"
+    },
+    {
+      "type": "url",
+      "id": "sidebar_cta_url",
+      "label": "CTA button URL"
+    },
+    {
+      "type": "header",
+      "content": "Section options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_section_title",
+      "label": "Show title above iFrame",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section title",
+      "default": "Featured Content"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background colour",
+      "default": "#f9fafb"
+    },
+    {
+      "type": "range",
+      "id": "vertical_padding",
+      "label": "Vertical padding (px)",
+      "min": 0,
+      "max": 100,
+      "step": 8,
+      "default": 40
+    },
+    {
+      "type": "select",
+      "id": "allow_scroll",
+      "label": "Scrolling",
+      "options": [
+        { "value": "auto", "label": "Auto" },
+        { "value": "yes",  "label": "Always" },
+        { "value": "no",   "label": "Never" }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "checkbox",
+      "id": "allow_fullscreen",
+      "label": "Allow fullscreen",
+      "default": false
+    }
+  ],
+  "presets": [
+    { "name": "iFrame Embed — B" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,128 @@
+{% comment %}
+  sections/iframe-embed.liquid — Template A
+  Full-width iFrame section. All settings are configurable via the theme editor.
+{% endcomment %}
+
+{%- assign iframe_url    = section.settings.iframe_url -%}
+{%- assign iframe_height = section.settings.iframe_height -%}
+{%- assign bg_color      = section.settings.background_color -%}
+
+<section
+  id="iframe-embed-a-{{ section.id }}"
+  class="iframe-embed-section"
+  style="background-color: {{ bg_color }}; padding: {{ section.settings.vertical_padding }}px 0;"
+>
+  <div class="page-width">
+
+    {%- if section.settings.show_section_title and section.settings.section_title != blank -%}
+      <h2 class="iframe-embed__title">{{ section.settings.section_title | escape }}</h2>
+    {%- endif -%}
+
+    <div class="iframe-embed__wrapper" style="height: {{ iframe_height }}px;">
+      {%- if iframe_url != blank -%}
+        <iframe
+          src="{{ iframe_url | escape }}"
+          width="100%"
+          height="{{ iframe_height }}"
+          frameborder="0"
+          scrolling="{{ section.settings.allow_scroll }}"
+          loading="lazy"
+          title="{{ section.settings.section_title | default: 'Embedded content' | escape }}"
+          {% if section.settings.allow_fullscreen %}allowfullscreen{% endif %}
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation"
+          style="display:block;border:none;width:100%;height:100%;"
+        ></iframe>
+      {%- else -%}
+        <div class="iframe-embed__placeholder">
+          <p>Set the iFrame URL in the theme editor to display content here.</p>
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .iframe-embed-section { width: 100%; box-sizing: border-box; }
+  .iframe-embed-section .page-width { max-width: var(--page-width, 1200px); margin: 0 auto; padding: 0 20px; }
+  .iframe-embed__title  { margin: 0 0 16px; font-size: 1.5rem; }
+  .iframe-embed__wrapper { width: 100%; overflow: hidden; position: relative; }
+  .iframe-embed__placeholder {
+    display: flex; align-items: center; justify-content: center;
+    height: 100%; background: #f4f6f8; border: 2px dashed #c4c8ce;
+    border-radius: 8px; color: #6b7280; text-align: center; padding: 20px;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "iFrame Embed — A",
+  "tag": "section",
+  "class": "iframe-embed-a",
+  "settings": [
+    {
+      "type": "text",
+      "id": "iframe_url",
+      "label": "iFrame URL",
+      "placeholder": "https://your-content-source.com/embed",
+      "info": "The URL of the curated content to embed."
+    },
+    {
+      "type": "range",
+      "id": "iframe_height",
+      "label": "iFrame height (px)",
+      "min": 200,
+      "max": 1200,
+      "step": 50,
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "vertical_padding",
+      "label": "Vertical padding (px)",
+      "min": 0,
+      "max": 100,
+      "step": 8,
+      "default": 40
+    },
+    {
+      "type": "checkbox",
+      "id": "show_section_title",
+      "label": "Show section title",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section title",
+      "default": "Featured Content"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background colour",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "allow_scroll",
+      "label": "Scrolling",
+      "options": [
+        { "value": "auto", "label": "Auto" },
+        { "value": "yes",  "label": "Always" },
+        { "value": "no",   "label": "Never" }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "checkbox",
+      "id": "allow_fullscreen",
+      "label": "Allow fullscreen",
+      "default": false
+    }
+  ],
+  "presets": [
+    { "name": "iFrame Embed — A" }
+  ]
+}
+{% endschema %}

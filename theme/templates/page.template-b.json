@@ -1,0 +1,30 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "iframe_embed_b": {
+      "type": "iframe-embed-b",
+      "settings": {
+        "iframe_url": "",
+        "iframe_height": 600,
+        "layout": "sidebar-right",
+        "show_sidebar": true,
+        "sidebar_width": 30,
+        "sidebar_heading": "About this content",
+        "sidebar_text": "<p>Add context or a description here.<\/p>",
+        "sidebar_cta_label": "",
+        "sidebar_cta_url": "",
+        "show_section_title": false,
+        "section_title": "Featured Content",
+        "background_color": "#f9fafb",
+        "vertical_padding": 40,
+        "allow_scroll": "auto",
+        "allow_fullscreen": false
+      }
+    }
+  },
+  "order": ["main", "iframe_embed_b"]
+}

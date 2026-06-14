@@ -1,0 +1,23 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "iframe_embed_a": {
+      "type": "iframe-embed",
+      "settings": {
+        "iframe_url": "",
+        "iframe_height": 600,
+        "vertical_padding": 40,
+        "show_section_title": false,
+        "section_title": "Featured Content",
+        "background_color": "#ffffff",
+        "allow_scroll": "auto",
+        "allow_fullscreen": false
+      }
+    }
+  },
+  "order": ["main", "iframe_embed_a"]
+}
