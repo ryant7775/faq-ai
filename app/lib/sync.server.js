@@ -1,8 +1,8 @@
 import { data } from "react-router";
 
 export function validateWebhookSecret(request) {
-  const incomingSecret = request.headers.get("x-webhook-secret");
-  const expectedSecret = process.env.WEBHOOK_SECRET;
+  const incomingSecret = request.headers.get("x-webhook-secret")?.trim();
+  const expectedSecret = process.env.WEBHOOK_SECRET?.trim();
 
   if (!expectedSecret) {
     console.error("[sync] WEBHOOK_SECRET environment variable is not set");
