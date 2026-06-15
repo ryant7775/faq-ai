@@ -11,6 +11,8 @@
     "env": "shopify app env",
     "start": "react-router-serve ./build/server/index.js",
     "docker-start": "sh scripts/docker-entrypoint.sh",
+    "db:generate:docker": "prisma generate --schema=/opt/prisma/schema.prisma",
+    "db:migrate:docker": "prisma migrate deploy --schema=/opt/prisma/schema.prisma",
     "setup": "prisma generate --schema=prisma/schema.prisma && prisma migrate deploy --schema=prisma/schema.prisma",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "shopify": "shopify",

@@ -5,7 +5,6 @@ EXPOSE 3000
 
 WORKDIR /app
 
-ENV NODE_ENV=production
 ENV DATABASE_URL="file:/data/dev.sqlite"
 ENV PRISMA_SCHEMA="/opt/prisma/schema.prisma"
 
@@ -13,6 +12,8 @@ RUN mkdir -p /data
 
 COPY package.json package-lock.json* ./
 
+# Install all dependencies (including dev) for the build. NODE_ENV=production
+# is set only after build — otherwise Prisma/Vite installs fail.
 RUN npm ci && npm cache clean --force
 
 # Keep schema + migrations outside /app so Railway volumes cannot hide them.
@@ -21,11 +22,12 @@ RUN test -f /opt/prisma/schema.prisma
 
 COPY . .
 
-# Use explicit binary path — npm scripts aren't on PATH in Docker RUN steps.
-RUN ./node_modules/.bin/prisma generate --schema=/opt/prisma/schema.prisma \
+RUN npm run db:generate:docker \
   && npm run build \
   && npm prune --omit=dev
 
 RUN chmod +x scripts/docker-entrypoint.sh
+
+ENV NODE_ENV=production
 
 CMD ["sh", "scripts/docker-entrypoint.sh"]
