@@ -7,12 +7,16 @@ import {
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
 
+function trimEnv(value) {
+  return typeof value === "string" ? value.trim() : value;
+}
+
 const shopify = shopifyApp({
-  apiKey: process.env.SHOPIFY_API_KEY,
-  apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
+  apiKey: trimEnv(process.env.SHOPIFY_API_KEY),
+  apiSecretKey: trimEnv(process.env.SHOPIFY_API_SECRET) || "",
   apiVersion: ApiVersion.October25,
   scopes: process.env.SCOPES?.split(",").map((scope) => scope.trim()),
-  appUrl: process.env.SHOPIFY_APP_URL || "",
+  appUrl: trimEnv(process.env.SHOPIFY_APP_URL) || "",
   authPathPrefix: "/auth",
   // TODO(production): Mount a Railway volume at /data (not /app/prisma).
   // DATABASE_URL should be file:/data/dev.sqlite. The schema stays in /app/prisma;

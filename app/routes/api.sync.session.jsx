@@ -37,6 +37,10 @@ export async function action({ request }) {
     },
   });
 
+  const apiKey = process.env.SHOPIFY_API_KEY || "";
+  const apiSecret = process.env.SHOPIFY_API_SECRET || "";
+  const appUrl = process.env.SHOPIFY_APP_URL || "";
+
   return data({
     shop,
     offline_session_id: offlineSessionId,
@@ -44,5 +48,18 @@ export async function action({ request }) {
     total_sessions_for_shop: allSessions.length,
     sessions: allSessions,
     database_url: process.env.DATABASE_URL || "(not set)",
+    auth_config: {
+      shopify_app_url: appUrl,
+      api_key_set: apiKey.length > 0,
+      api_key_has_whitespace:
+        apiKey !== apiKey.trim() || apiKey.includes("\n") || apiKey.includes("\r"),
+      api_key_prefix: apiKey.trim().slice(0, 8),
+      api_secret_set: apiSecret.length > 0,
+      api_secret_has_whitespace:
+        apiSecret !== apiSecret.trim() ||
+        apiSecret.includes("\n") ||
+        apiSecret.includes("\r"),
+      expected_client_id_prefix: "20b8267e",
+    },
   });
 }
