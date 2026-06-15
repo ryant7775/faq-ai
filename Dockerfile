@@ -21,7 +21,8 @@ RUN test -f /opt/prisma/schema.prisma
 
 COPY . .
 
-RUN npx prisma generate --schema=/opt/prisma/schema.prisma \
+# Use explicit binary path — npm scripts aren't on PATH in Docker RUN steps.
+RUN ./node_modules/.bin/prisma generate --schema=/opt/prisma/schema.prisma \
   && npm run build \
   && npm prune --omit=dev
 
