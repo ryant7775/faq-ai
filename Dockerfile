@@ -21,7 +21,7 @@ RUN test -f /opt/prisma/schema.prisma
 
 COPY . .
 
-RUN prisma generate --schema=/opt/prisma/schema.prisma \
+RUN npx prisma generate --schema=/opt/prisma/schema.prisma \
   && npm run build \
   && npm prune --omit=dev
 

@@ -16,6 +16,6 @@ if [ ! -f "$SCHEMA" ]; then
   exit 1
 fi
 
-prisma generate --schema="$SCHEMA"
-prisma migrate deploy --schema="$SCHEMA"
+npx prisma generate --schema="$SCHEMA"
+npx prisma migrate deploy --schema="$SCHEMA"
 exec npm run start
