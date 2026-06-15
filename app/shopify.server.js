@@ -14,9 +14,9 @@ const shopify = shopifyApp({
   scopes: process.env.SCOPES?.split(","),
   appUrl: process.env.SHOPIFY_APP_URL || "",
   authPathPrefix: "/auth",
-  // TODO(production): Mount a Railway volume at /data (not /app/prisma) so dev.sqlite persists.
-  // DATABASE_URL should be file:/data/dev.sqlite in production. Do not mount over /app/prisma
-  // or Prisma will lose schema.prisma at runtime.
+  // TODO(production): Mount a Railway volume at /data (not /app/prisma).
+  // DATABASE_URL should be file:/data/dev.sqlite. The schema stays in /app/prisma;
+  // only the SQLite file lives on the volume.
   sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
   future: {
